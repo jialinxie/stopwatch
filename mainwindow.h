@@ -43,8 +43,6 @@ private:
     QPalette continuePA;
     QPalette pausePa;
     QWidget *mainWidget;
-    //QPushButton *closeButton ;
-    //QPushButton *minButton ;
     QLabel *totalTime;
 
     QGroupBox *options;
@@ -53,7 +51,6 @@ private:
     QPushButton *rightButton;
     QListWidget *data;
     QTimer *timer;
-
     void initUI();
 public:
     MainWindow(QWidget *parent = 0);

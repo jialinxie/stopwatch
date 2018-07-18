@@ -26,14 +26,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    utils.cpp \
-    myitem.cpp
+        myitem.cpp
 
 HEADERS += \
         mainwindow.h \
-    utils.h \
-    myitem.h
+        myitem.h
 
 QMAKE_CXXFLAGS += -g
-
-CONFIG += console

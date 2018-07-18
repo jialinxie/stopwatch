@@ -96,26 +96,25 @@ void MainWindow::rightSlot()
             intervalResult = totalResult;
         }else{
             int first = 0, second = 0, three = 0;
-            three =     (totalResultMs - LastTotalResultMs) % 100;
+            three  =    (totalResultMs - LastTotalResultMs) % 100;
             second =    (totalResultMs - LastTotalResultMs) % 6000 / 100;
-            first =     (totalResultMs - LastTotalResultMs) / 6000;
+            first  =    (totalResultMs - LastTotalResultMs) / 6000;
 
             intervalResult = (first < 10 ? "0"+QString::number(first) :QString::number(first))+":"
                                 +(second < 10 ? "0"+QString::number(second) :QString::number(second))+"."
                                 + (three < 10 ? "0"+QString::number(three) :QString::number(three));
-
-            qDebug() << "intervalResult = " << intervalResult;
-        }
+       }
         LastTotalResultMs = totalResultMs;
 
         index++;
+
         MyItem *myWidget = new MyItem;
         myWidget->setIndexAndValue(QString::number(index),totalResult, intervalResult);
+
         QListWidgetItem *items = new QListWidgetItem;
         items->setSizeHint(QSize(0, 35));
         data->insertItem(0,items);
         data->setItemWidget(items,myWidget);
-
     }else{//reset
         index = 0;
         totalTime->setText("00:00.00");
@@ -154,8 +153,6 @@ void MainWindow::timerUpDateSlot()
 // init
 void MainWindow::initUI()
 {
-    qApp->setStyleSheet(Utils::getQssFileContent(":/style.qss"));
-
     this->setMaximumSize(240,300);
     this->setMinimumSize(240,300);
     this->move(0, 0);
@@ -215,4 +212,3 @@ void MainWindow::initUI()
 
     this->setCentralWidget(mainWidget);
 }
-
