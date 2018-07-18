@@ -33,22 +33,7 @@ HEADERS += \
         mainwindow.h \
     utils.h \
     myitem.h
-RC_FILE = app.rc
-
-RESOURCES += \
-    resource.qrc
 
 QMAKE_CXXFLAGS += -g
 
-isEmpty(BINDIR):BINDIR=/usr/bin
-isEmpty(APPDIR):APPDIR=/usr/share/applications
-isEmpty(ICONSDIR):ICONSDIR=/usr/share/icons/stopwatch
-
-target.path = $$INSTROOT$$BINDIR
-desktop.path = $$INSTROOT$$APPDIR
-desktop.files = stopwatch.desktop
-
-icons.path = $$INSTROOT$$ICONSDIR
-icons.files = app.ico
-
-INSTALLS += target desktop icons
+CONFIG += console

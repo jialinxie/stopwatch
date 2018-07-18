@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include <QApplication>
 #include <QMainWindow>
@@ -37,11 +37,14 @@ private:
     int threeTotalTime;
     int index;
     QString totalResult;
+    QString intervalResult;
+    int totalResultMs;
+    int LastTotalResultMs = 0;
     QPalette continuePA;
     QPalette pausePa;
     QWidget *mainWidget;
-    QPushButton *closeButton ;
-    QPushButton *minButton ;
+    //QPushButton *closeButton ;
+    //QPushButton *minButton ;
     QLabel *totalTime;
 
     QGroupBox *options;

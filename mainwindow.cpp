@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -8,18 +8,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->initUI();
 
-    //关联信号和操
-    connect(closeButton,SIGNAL(clicked(bool)),this,SLOT(close()));
-    connect(minButton,SIGNAL(clicked(bool)),this,SLOT(minSlot()));
+    //关联信号和槽
     connect(start,SIGNAL(clicked(bool)),this,SLOT(startSlot()));
-
     connect(leftButton,SIGNAL(clicked(bool)),this,SLOT(leftSlot()));
     connect(rightButton,SIGNAL(clicked(bool)),this,SLOT(rightSlot()));
 
     timer = new QTimer(this);   //新建定时器
     connect(timer,SIGNAL(timeout()),this,SLOT(timerUpDateSlot()));//关联定时器计满信号和相应的槽函数
-
-
 }
 
 MainWindow::~MainWindow()
@@ -63,7 +58,7 @@ void MainWindow::startSlot()
     firstTotalTime = 0;
     secondTotalTime = 0;
     threeTotalTime =0;
-    timer->start(10);
+    timer->start(10);   //定时时间到时发送timeout信号
 }
 
 
@@ -90,12 +85,32 @@ void MainWindow::rightSlot()
 {
     if(rightButton->objectName() =="remember_times"){
         if(data->isHidden()){
-            totalTime->move(totalTime->x(),totalTime->y() - 160);
+            totalTime->move(totalTime->x(),totalTime->y() - 100);
             data->show();
         }
+
+        totalResultMs = firstTotalTime * 60 * 100 + secondTotalTime * 100 + threeTotalTime;
+
+        if(0 == LastTotalResultMs){
+            LastTotalResultMs = totalResultMs;
+            intervalResult = totalResult;
+        }else{
+            int first = 0, second = 0, three = 0;
+            three =     (totalResultMs - LastTotalResultMs) % 100;
+            second =    (totalResultMs - LastTotalResultMs) % 6000 / 100;
+            first =     (totalResultMs - LastTotalResultMs) / 6000;
+
+            intervalResult = (first < 10 ? "0"+QString::number(first) :QString::number(first))+":"
+                                +(second < 10 ? "0"+QString::number(second) :QString::number(second))+"."
+                                + (three < 10 ? "0"+QString::number(three) :QString::number(three));
+
+            qDebug() << "intervalResult = " << intervalResult;
+        }
+        LastTotalResultMs = totalResultMs;
+
         index++;
         MyItem *myWidget = new MyItem;
-        myWidget->setIndexAndValue(QString::number(index),totalResult);
+        myWidget->setIndexAndValue(QString::number(index),totalResult, intervalResult);
         QListWidgetItem *items = new QListWidgetItem;
         items->setSizeHint(QSize(0, 35));
         data->insertItem(0,items);
@@ -139,15 +154,11 @@ void MainWindow::timerUpDateSlot()
 // init
 void MainWindow::initUI()
 {
-    QDesktopWidget *widget = new QDesktopWidget;
-    this->setWindowFlags(Qt::FramelessWindowHint);
-    this->setAttribute(Qt::WA_TranslucentBackground, true);
-
     qApp->setStyleSheet(Utils::getQssFileContent(":/style.qss"));
 
-    this->setMaximumSize(320,480);
-    this->setMinimumSize(320,480);
-    this->move(widget->width() / 2 - this->width() / 2, widget->height() / 2 - this->height() / 2);
+    this->setMaximumSize(240,300);
+    this->setMinimumSize(240,300);
+    this->move(0, 0);
 
     this->setWindowTitle(tr("秒表"));
     this->setWindowIcon(QIcon(":/app.ico"));
@@ -157,17 +168,7 @@ void MainWindow::initUI()
 
     title->setText(tr("秒表"));
     title->move(8,6);
-    //关闭按钮
-    closeButton = new QPushButton(mainWidget);
-    closeButton->setGeometry(this->width() - 24,6,20,20);
-    closeButton->setFlat(true);
-    closeButton->setObjectName(tr("closeButton"));
-    closeButton->setToolTip(tr("关闭"));
-    minButton = new QPushButton(mainWidget);
-    minButton->setGeometry(this->width() - 48,6,20,20);
-    minButton->setFlat(true);
-    minButton->setObjectName(tr("minButton"));
-    minButton->setToolTip(tr("最小化"));
+
     //总时间
     totalTime = new QLabel(mainWidget);
     totalTime->setText("00:00.00");
